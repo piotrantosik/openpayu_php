@@ -3,12 +3,12 @@
 /*
 	OpenPayU Standard Library
 
-	@copyright  Copyright (c) 2011-2014 PayU
+	@copyright  Copyright (c) 2011-2012 PayU
 	@license    http://opensource.org/licenses/LGPL-3.0  Open Software License (LGPL 3.0)
 	http://www.payu.com
-	http://developers.payu.com
+	http://openpayu.com
 	http://twitter.com/openpayu
-
+		
 */
 
 class OpenPayUDomain

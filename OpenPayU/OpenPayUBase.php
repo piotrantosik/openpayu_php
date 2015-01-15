@@ -3,12 +3,15 @@
 /*
 	OpenPayU Standard Library
 
-	@copyright  Copyright (c) 2011-2014 PayU
+	@copyright  Copyright (c) 2011-2012 PayU
 	@license    http://opensource.org/licenses/LGPL-3.0  Open Software License (LGPL 3.0)
 	http://www.payu.com
-	http://developers.payu.com
+	http://openpayu.com
 	http://twitter.com/openpayu
 */
+
+if (!defined('OPENPAYU_LIBRARY'))
+    exit;
 
 class OpenPayUBase extends OpenPayUNetwork
 {
@@ -20,7 +23,7 @@ class OpenPayUBase extends OpenPayUNetwork
      * Show outputConsole message
      * @access public
      */
-    public static function  printOutputConsole()
+    public static function printOutputConsole()
     {
         echo OpenPayU::$outputConsole;
     }
@@ -67,7 +70,6 @@ class OpenPayUBase extends OpenPayUNetwork
     /**
      * Function converts array to XML document
      * @access public
-     * @deprecated
      * @param XMLWriter $xml
      * @param array $data
      */
@@ -128,25 +130,21 @@ class OpenPayUBase extends OpenPayUNetwork
     /**
      * Function converts xml to array
      * @access public
-     * @deprecated
      * @param XMLReader $xml
      * @return array $tree
      */
     public static function read($xml)
     {
         $tree = null;
-        if(isset($xml))
-        {
-            while ($xml->read()) {
-                if ($xml->nodeType == XMLReader::END_ELEMENT) {
-                    return $tree;
-                } else if ($xml->nodeType == XMLReader::ELEMENT) {
-                    if (!$xml->isEmptyElement) {
-                        $tree[$xml->name] = OpenPayUBase::read($xml);
-                    }
-                } else if ($xml->nodeType == XMLReader::TEXT) {
-                    $tree = $xml->value;
+        while ($xml->read()) {
+            if ($xml->nodeType == XMLReader::END_ELEMENT) {
+                return $tree;
+            } else if ($xml->nodeType == XMLReader::ELEMENT) {
+                if (!$xml->isEmptyElement) {
+                    $tree[$xml->name] = OpenPayUBase::read($xml);
                 }
+            } else if ($xml->nodeType == XMLReader::TEXT) {
+                $tree = $xml->value;
             }
         }
         return $tree;
@@ -170,41 +168,33 @@ class OpenPayUBase extends OpenPayUNetwork
         $xml = new XmlWriter();
         $xml->openMemory();
         $xml->startDocument($xml_version, $xml_encoding);
+        $xml->startElementNS(null, 'OpenPayU', 'http://www.openpayu.com/openpayu.xsd');
 
-        if(OpenPayU_Configuration::getApiVersion() < 2)
-        {
-            $xml->startElementNS(null, 'OpenPayU', 'http://www.openpayu.com/openpayu.xsd');
-            $header = $request == 1 ? 'HeaderRequest' : 'HeaderResponse';
+        $header = $request == 1 ? 'HeaderRequest' : 'HeaderResponse';
 
-            $xml->startElement($header);
+        $xml->startElement($header);
 
-            $xml->writeElement('Algorithm', OpenPayU_Configuration::getHashAlgorithm());
+        $xml->writeElement('Algorithm', 'MD5');
 
-            $xml->writeElement('SenderName', 'exampleSenderName');
-            $xml->writeElement('Version', $xml_version);
+        $xml->writeElement('SenderName', 'exampleSenderName');
+        $xml->writeElement('Version', $xml_version);
 
-            $xml->endElement();
-        }
-        else
-            $xml->startElementNS(null, 'OpenPayU', 'http://www.openpayu.com/20/openpayu.xsd');
+        $xml->endElement();
 
         // domain level - open
-        if(OpenPayU_Configuration::getApiVersion() < 2)
-            $xml->startElement(OpenPayUDomain::getDomain4Message($startElement));
+        $xml->startElement(OpenPayUDomain::getDomain4Message($startElement));
 
         // message level - open
         $xml->startElement($startElement);
 
-        OpenPayU_Util::convertArrayToXml($xml, $data);
+        self::arr2xml($xml, $data);
 
         // message level - close
         $xml->endElement();
         // domain level - close
         $xml->endElement();
-
         // document level - close
-        if(OpenPayU_Configuration::getApiVersion() < 2)
-            $xml->endElement();
+        $xml->endElement();
 
         return $xml->outputMemory(true);
     }
@@ -249,7 +239,6 @@ class OpenPayUBase extends OpenPayUNetwork
     /**
      * Function converts Xml string to array
      * @access public
-     * @deprecated
      * @param string $xmldata
      * @return array $assoc
      */

@@ -1,63 +1,10 @@
-## 2.1.0
-* Endpoint https://secure.payu.com/api/v2_1/orders
-* Simplification of request structure by eliminating nesting
-* Status code 200 as only response after receiving notification
-* Parameters starting with lowercase letters
-* CurrencyCode field removed from refund create request
-* CompleteUrl replaced with continueUrl
-* Value of optional field extOrderId must be unique within one point of sale (POS)
+## 1.9.4
 
-## 2.0.8
-* More data in OrderCreate.php example: addition of invoice and delivery optional sections
-
-## 2.0.7
-
-* README.md update
-* CHANGELOG.md update
-* Cleaned and fixed links in OrderCreate.php example
-* ContinueUrl.php deleted
-* OpenPayU_Util::statusDesc($response) function update
-
-## 2.0.6
-
-* GeneratedOrderForm.php removal
-
-## 2.0.5
-
-* Fixed bugs in examples.
-
-## 2.0.4
-
-* Fixed bugs
-
-## 2.0.3
-
-* Added tracking of version
-
-## 2.0.2
-
-* Fixed some bugs
-* Updated README.md
-
-## 2.0.1
-
-* Fixed some bugs
-* Removed support for XML messages
-* Removed unsupported examples
-* Fixed problem with uppercase keys in order array
-
-## 2.0
-
-* Removed support for OpenPayU 1.0
-* Added support for OpenPayuU REST API
-* Fixed bugs
-* Added unit tests
+* Added parameter to HTTP header
 
 ## 1.9.3
 
-* Added order.cancel and order.statusUpdate functions
-* Added hostedOrderForm function
-* Unification according to ruby_sdk. Improve comments.
+* Fixed OAuth notice
 
 ## 1.9.2
 
